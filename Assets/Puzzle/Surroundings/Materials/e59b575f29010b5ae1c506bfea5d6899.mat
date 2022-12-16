@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: star_skybox
+  m_Name: e59b575f29010b5ae1c506bfea5d6899
   m_Shader: {fileID: 103, guid: 0000000000000000f000000000000000, type: 0}
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -21,7 +21,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _Tex:
-        m_Texture: {fileID: 8900000, guid: d2fc785a2753dde4fb190954141fccb4, type: 3}
+        m_Texture: {fileID: 8900000, guid: d2c96f007c9875c44a173de4b4e1bc32, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
