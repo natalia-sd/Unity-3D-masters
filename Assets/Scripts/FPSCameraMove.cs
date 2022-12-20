@@ -1,52 +1,132 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class FPSCameraMove : MonoBehaviour
 {
-    public CharacterController controller;
+    [SerializeField] Transform cameraTransform;
+    [SerializeField] public float mouseSensetivity = 5f;
 
-    public float speed = 12f;
-    public Transform groundCheck;
-    public float groundDistance = 0.4f;
+    [SerializeField] float mass = 1f;
+    Vector2 look;
+    
+    [SerializeField] public float speed = 12f;
+    [SerializeField] public float jumpSpeed = 24f;
+    // Input system
+    PlayerInput playerInput;
+    InputAction moveAction;
+    InputAction lookAction;
+    InputAction jumpAction;
 
-    // Some Physics
-    public LayerMask groundMask;
-    public float jumpHeight = 3f;
-
+    //flying
+    public enum State
+    {
+        Walking,
+        Flying
+    }
+    public State state;
     Vector3 velocity;
-    bool isGrounded;
 
-    public float gravity = -9.81f;
-    // Start is called before the first frame update
+    
+    CharacterController controller;
+    private void Awake() 
+    {
+        controller = GetComponent<CharacterController>();
+        playerInput = GetComponent<PlayerInput>();
+        moveAction = playerInput.actions["move"];
+        lookAction = playerInput.actions["look"];
+        jumpAction = playerInput.actions["jump"];
+    }
     void Start()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    void Update()
+    {   
+        switch (state)
+        {
+            // Walking
+            case State.Walking:
+            UpdateGravity();
+            UpdateMovement();
+            UpdateLook();
+            break;
+
+            // Flying
+            case State.Flying:
+            UpdateMovementFlying();
+            UpdateLook();
+            break;
+        }
+        UpdateLook();
         
     }
 
-    // Update is called once per frame
-    void Update()
+    void UpdateLook()
     {
-        // Gravity Physics realisation
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-        if (isGrounded && velocity.y < 0)
-        {
-            velocity.y = -2f;
-        }
+        // Get mouse moves
+        var lookInput = lookAction.ReadValue<Vector2>();
+        look.x += lookInput.x * mouseSensetivity; 
+        look.y += lookInput.y * mouseSensetivity; 
 
-        // Move inputs
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
-        Vector3 move = transform.right * x + transform.forward * z;
-        controller.Move(move * speed * Time.deltaTime);
+        // Rotation limits
+        look.y = Mathf.Clamp(look.y, -90f, 80f);
+
+        cameraTransform.localRotation = Quaternion.Euler(-look.y, 0f, 0f);
+        transform.localRotation = Quaternion.Euler(0f, look.x, 0f);
+    }
+
+    Vector3 GetMovementInput(bool horizontal = true)
+    {
+        var moveInput = moveAction.ReadValue<Vector2>();
+        var input = new Vector3();
+        var referenceTransform = horizontal ? transform : cameraTransform;
+        input += referenceTransform.forward * moveInput.y;
+        input += referenceTransform.right * moveInput.x;
+        input = Vector3.ClampMagnitude(input, 1f);
+        return input;
+    }
+
+     void UpdateMovement()
+     {
+        
+         // Move inputs
+        //var x = Input.GetAxis("Horizontal");
+        //var z = Input.GetAxis("Vertical");
+        var input = GetMovementInput();
 
         // Jummping
-        if(Input.GetButtonDown("Jump") && isGrounded)
+        var jumpInput = jumpAction.ReadValue<float>();
+        if(jumpInput > 0 && controller.isGrounded)
         {
-            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            velocity.y += jumpSpeed;
         }
+        controller.Move((input * speed + velocity) * Time.deltaTime);
+     }
 
-        velocity.y += gravity * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
-    }
+    void UpdateMovementFlying()
+     {
+        
+         // Move inputs
+        //var x = Input.GetAxis("Horizontal");
+        //var z = Input.GetAxis("Vertical");
+        var input = GetMovementInput(false);
+
+        // Jummping
+        velocity = Vector3.Lerp(velocity, input, 1f);
+        controller.Move((input * speed + velocity) * Time.deltaTime);
+     }
+
+     void UpdateGravity()
+     {
+        var gravity = Physics.gravity * mass * Time.deltaTime;
+        velocity.y = controller.isGrounded ? -1f : velocity.y + gravity.y;
+     }
+
+     void OnToggleFlying()
+     {
+        state = state == State.Flying ? State.Walking : State.Flying;
+     }
 }
