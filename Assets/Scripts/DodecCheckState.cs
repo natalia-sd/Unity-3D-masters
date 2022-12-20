@@ -1,10 +1,9 @@
 using UnityEngine;
 
-public class CubeCheckState : MonoBehaviour
+public class DodecCheckState : MonoBehaviour
 {
-    public CubeGetShot[] tiles;
+    public DodecGetShot[] tiles;
     public Light lightl;
-    public GameObject wall;
     
     // Update is called once per frame
     void Update()
@@ -23,8 +22,6 @@ public class CubeCheckState : MonoBehaviour
         if (correctTiles == tiles.Length)
         {
             lightl.enabled = true;
-            wall.SetActive(false);
         }
     }
-
 }
