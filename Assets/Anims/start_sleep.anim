@@ -420,4 +420,11 @@ AnimationClip:
     script: {fileID: 0}
   m_HasGenericRootTransform: 1
   m_HasMotionFloatCurves: 0
-  m_Events: []
+  m_Events:
+  - time: 15.166667
+    functionName: LoadNewScene
+    data: 
+    objectReferenceParameter: {fileID: 11500000, guid: 19d02bc41cef2724bb5e869e1472c1ed, type: 3}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0

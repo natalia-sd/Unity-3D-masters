@@ -4,7 +4,8 @@ public class DodecCheckState : MonoBehaviour
 {
     public DodecGetShot[] tiles;
     public Light lightl;
-    
+    public bool DodecSolved = false;
+
     // Update is called once per frame
     void Update()
     {
@@ -22,6 +23,7 @@ public class DodecCheckState : MonoBehaviour
         if (correctTiles == tiles.Length)
         {
             lightl.enabled = true;
+            DodecSolved = true;
         }
     }
 }

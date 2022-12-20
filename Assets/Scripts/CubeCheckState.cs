@@ -6,6 +6,7 @@ public class CubeCheckState : MonoBehaviour
     public Light lightl;
     public GameObject wall;
     
+    public bool CubeSolved = false;
     // Update is called once per frame
     void Update()
     {
@@ -24,6 +25,7 @@ public class CubeCheckState : MonoBehaviour
         {
             lightl.enabled = true;
             wall.SetActive(false);
+            CubeSolved = true;
         }
     }
 
