@@ -12,3 +12,4 @@ We have developed a cozy and colorful mini puzzle game called NEON DREAM full of
 You are to solve two puzzles to find the way out of strangily stupefying world of your dream. If you succeed you can come back home.... or not? Whatever, it is up to you to decide if it was a dream or not and whether you want to be back
 
 Build archive link: https://drive.google.com/drive/folders/1NLdVqlW8mCqEXTg0UVNK3gQdLw7T9hTu?usp=sharing
+Letsplay: https://youtu.be/hzjpGlkXdPY
